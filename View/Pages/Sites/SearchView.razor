@@ -1,0 +1,52 @@
+﻿@page "/search"
+@attribute [Authorize]
+
+<MudGrid>
+    <MudItem xs="10" xl="12">
+        <div @onkeydown="@Search">
+            <MudTextField T="string" Label="Search Term" Required="false"
+                          @bind-Value="searchterm"/>
+        </div>
+    </MudItem>
+    <MudItem xs="2" Class="align-self-center float-end">
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="ml-auto">Search</MudButton>
+    </MudItem>
+    @if (Chips is {Count: > 0 })
+    {
+        <MudItem xs="10">
+            <MudChipSet MultiSelection="true" Filter="true">
+                @foreach (var chip in Chips)
+                {
+                    <MudChip OnClick="() => ChipClicked(chip)" Variant="Variant.Text" Color="Color.Info">@chip.GetType().Name</MudChip>
+                }
+            </MudChipSet>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    string searchterm;
+
+    List<Thing>? Chips { get; set; }
+
+    async Task ChipClicked(Thing chip)
+    {
+        
+        StateHasChanged();
+    }
+
+    async Task GetSelectedChips()
+    {
+        
+    }
+
+    async Task Search()
+    {
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Chips = await ThingRepository.ReadAsync();
+    }
+
+}
